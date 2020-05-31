@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Notepad</string>
     <string name="search">Search</string>
+    <string name="note_deleted">Note deleted</string>
 </resources>
