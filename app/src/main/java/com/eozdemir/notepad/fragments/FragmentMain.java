@@ -1,12 +1,14 @@
-package com.eozdemir.notepad;
+package com.eozdemir.notepad.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,18 +19,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.eozdemir.notepad.MainActivity;
+import com.eozdemir.notepad.R;
+import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener{
 
     private static String TAG = "MainPage";
 
-    RecyclerView mRecyclerView;
-    FloatingActionButton mAddNote;
-    Toolbar mToolbar;
-    public ArrayList<String> mNotesArrayList;
+    private RecyclerView mRecyclerView;
+    private FloatingActionButton mAddNote;
+    private Toolbar mToolbar;
+    private Realm mRealm;
 
     @Nullable
     @Override
@@ -43,7 +51,27 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        try {
+            //todo Debug
+            mRealm.beginTransaction();
+            mRealm = Realm.getDefaultInstance();
+            readData();
+        }catch (Exception e) {
+            Log.e(TAG,"Null");
+        }
+
         return view;
+
+    }
+
+    private void readData() {
+
+        RealmResults<Note> mNotes = mRealm.where(Note.class).findAll();
+        //TODO teker teker rcyleview'e atıcaz bunları
+        Toast.makeText(getContext(),mNotes.toString(),Toast.LENGTH_SHORT).show();
+
+
+
 
     }
 
@@ -56,6 +84,13 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).setViewPager(1);
+
+
+                try {
+                    readData();
+                }catch (Exception e) {
+                    Log.e(TAG,"Null");
+                }
             }
         });
 

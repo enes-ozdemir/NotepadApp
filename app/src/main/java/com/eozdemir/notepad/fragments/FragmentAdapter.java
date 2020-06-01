@@ -1,4 +1,4 @@
-package com.eozdemir.notepad;
+package com.eozdemir.notepad.fragments;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

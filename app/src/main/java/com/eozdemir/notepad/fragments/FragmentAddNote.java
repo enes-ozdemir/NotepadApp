@@ -1,4 +1,4 @@
-package com.eozdemir.notepad;
+package com.eozdemir.notepad.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.eozdemir.notepad.MainActivity;
+import com.eozdemir.notepad.R;
+import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.sql.Time;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import io.realm.Realm;
 
 public class FragmentAddNote extends Fragment {
 
@@ -25,6 +35,9 @@ public class FragmentAddNote extends Fragment {
     FloatingActionButton fabSave;
     EditText mEditText;
     Toolbar mToolbar;
+    Realm mRealm;
+    List<Note> mNoteList;
+    Date mDate;
 
 
     @Nullable
@@ -52,7 +65,11 @@ public class FragmentAddNote extends Fragment {
         fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEditText.getText();
+                mRealm.beginTransaction();
+                Note mNote = mRealm.createObject(Note.class);
+                mNote.setNote(String.valueOf(mEditText.getText()));
+                Toast.makeText(getContext(),mNote.getNote(),Toast.LENGTH_SHORT).show();
+                mRealm.commitTransaction();
 
             }
         });
@@ -66,6 +83,11 @@ public class FragmentAddNote extends Fragment {
 
             }
         });
+
+
+        mRealm = Realm.getDefaultInstance();
+
+
 
         return view;
     }
