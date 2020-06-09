@@ -2,7 +2,6 @@ package com.eozdemir.notepad.model;
 
 
 import java.util.Date;
-import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -36,7 +35,7 @@ public class Note extends RealmObject {
         this.date = date;
     }
 
-    public List<String> getNote() {
+    public RealmList<String> getNote() {
         return note;
     }
 

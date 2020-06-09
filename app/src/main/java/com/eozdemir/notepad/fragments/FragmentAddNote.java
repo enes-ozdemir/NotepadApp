@@ -19,11 +19,7 @@ import com.eozdemir.notepad.R;
 import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -38,7 +34,9 @@ public class FragmentAddNote extends Fragment {
     EditText mEditText;
     Toolbar mToolbar;
     Realm mRealm;
-    Date mDate;
+    private RealmList<String> note;
+    final static Date mDate = new Date();
+
 
 
     @Nullable
@@ -66,14 +64,19 @@ public class FragmentAddNote extends Fragment {
         fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mRealm.beginTransaction();
-                Note mNote = mRealm.createObject(Note.class);
-                RealmList<String> arrayList = new RealmList<String>();
-                arrayList.add(0,mEditText.getText().toString());
-                mNote.setNote(arrayList);
-                Toast.makeText(getContext(),mNote.getNote().get(0),Toast.LENGTH_SHORT).show();
+                note = new RealmList<>();
+                mRealm = Realm.getDefaultInstance();
+                mRealm.beginTransaction();
                 mRealm.commitTransaction();
-
+                note.add(mEditText.getText().toString());
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Note mNote = realm.createObject(Note.class);
+                        mNote.setNote(note);
+                        mNote.setDate(mDate);
+                    }
+                });
             }
         });
 
@@ -86,11 +89,6 @@ public class FragmentAddNote extends Fragment {
 
             }
         });
-
-
-        mRealm = Realm.getDefaultInstance();
-
-
 
         return view;
     }

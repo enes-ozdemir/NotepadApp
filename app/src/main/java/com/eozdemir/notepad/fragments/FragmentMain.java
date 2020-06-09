@@ -1,14 +1,13 @@
 package com.eozdemir.notepad.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,22 +20,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.eozdemir.notepad.MainActivity;
 import com.eozdemir.notepad.R;
+import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
-public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener{
+public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener {
 
     private static String TAG = "MainPage";
 
     private RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+
     private FloatingActionButton mAddNote;
     private Toolbar mToolbar;
     private Realm mRealm;
-    RecyclerView.Adapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
     private RealmList<String> note;
 
 
@@ -46,26 +47,12 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
         View view = inflater.inflate(R.layout.main_layout, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rvmain);
-
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         setAddNote(view);
         setToolbar(view);
+        readData();
 
-        note= new RealmList<>();
-        note.add("Enes");
-        mRecyclerView.setHasFixedSize(true);
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new MainAdapter(note);
-        mRecyclerView.setAdapter(mAdapter);
-
-        try {
-            //todo Debug
-            mRealm.beginTransaction();
-            mRealm = Realm.getDefaultInstance();
-            readData();
-        }catch (Exception e) {
-            Log.e(TAG,"Null");
-        }
 
         return view;
 
@@ -73,9 +60,20 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
     private void readData() {
 
-        //TODO teker teker rcyleview'e atıcaz bunları
+        mRealm = Realm.getDefaultInstance();
+        mRealm.beginTransaction();
+        mRealm.commitTransaction();
 
+        RealmResults<Note> mNote = mRealm.where(Note.class).findAll();
 
+        note = new RealmList<String>();
+
+        for (int i = 0; i < mNote.size(); i++) {
+            note.add(mNote.get(i).getNote().get(0).toString());
+        }
+
+        mAdapter = new MainAdapter(mRealm, note);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 
@@ -87,14 +85,7 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
         mAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).setViewPager(1);
-
-
-                try {
-                    readData();
-                }catch (Exception e) {
-                    Log.e(TAG,"Null");
-                }
+                ((MainActivity) getActivity()).setViewPager(1);
             }
         });
 
@@ -111,7 +102,7 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        ((MainActivity)getActivity()).getMenuInflater().inflate(R.menu.menu,menu);
+        ((MainActivity) getActivity()).getMenuInflater().inflate(R.menu.menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) menuItem.getActionView();
