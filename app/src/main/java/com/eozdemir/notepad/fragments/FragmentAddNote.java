@@ -20,11 +20,13 @@ import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class FragmentAddNote extends Fragment {
 
@@ -36,7 +38,6 @@ public class FragmentAddNote extends Fragment {
     EditText mEditText;
     Toolbar mToolbar;
     Realm mRealm;
-    List<Note> mNoteList;
     Date mDate;
 
 
@@ -65,10 +66,12 @@ public class FragmentAddNote extends Fragment {
         fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRealm.beginTransaction();
+                //mRealm.beginTransaction();
                 Note mNote = mRealm.createObject(Note.class);
-                mNote.setNote(String.valueOf(mEditText.getText()));
-                Toast.makeText(getContext(),mNote.getNote(),Toast.LENGTH_SHORT).show();
+                RealmList<String> arrayList = new RealmList<String>();
+                arrayList.add(0,mEditText.getText().toString());
+                mNote.setNote(arrayList);
+                Toast.makeText(getContext(),mNote.getNote().get(0),Toast.LENGTH_SHORT).show();
                 mRealm.commitTransaction();
 
             }

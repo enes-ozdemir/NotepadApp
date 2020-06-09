@@ -10,7 +10,6 @@ import com.eozdemir.notepad.fragments.FragmentAddNote;
 import com.eozdemir.notepad.fragments.FragmentMain;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +26,6 @@ Realm mRealm;
 
         mViewPager = (ViewPager) findViewById(R.id.containter);
         setupViewPager(mViewPager);
-
         mRealm = Realm.getDefaultInstance();
         mRealm.beginTransaction();
         mRealm.commitTransaction();

@@ -2,18 +2,20 @@ package com.eozdemir.notepad.model;
 
 
 import java.util.Date;
+import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class Note extends RealmObject {
 
-    private String note;
+    private RealmList<String> note;
     private Date date;
 
     public Note() {
     }
 
-    public Note(String note, Date date) {
+    public Note(RealmList<String> note, Date date) {
         this.note = note;
         this.date = date;
     }
@@ -26,19 +28,19 @@ public class Note extends RealmObject {
                 '}';
     }
 
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public List<String> getNote() {
+        return note;
+    }
+
+    public void setNote(RealmList<String> note) {
+        this.note = note;
     }
 }

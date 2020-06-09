@@ -21,13 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.eozdemir.notepad.MainActivity;
 import com.eozdemir.notepad.R;
-import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmList;
 
 public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener{
 
@@ -37,19 +35,28 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
     private FloatingActionButton mAddNote;
     private Toolbar mToolbar;
     private Realm mRealm;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+    private RealmList<String> note;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.main_layout, container, false);
-
-        mRecyclerView = view.findViewById(R.id.rvmain);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rvmain);
 
         setAddNote(view);
         setToolbar(view);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        note= new RealmList<>();
+        note.add("Enes");
+        mRecyclerView.setHasFixedSize(true);
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new MainAdapter(note);
+        mRecyclerView.setAdapter(mAdapter);
 
         try {
             //todo Debug
@@ -66,10 +73,7 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
     private void readData() {
 
-        RealmResults<Note> mNotes = mRealm.where(Note.class).findAll();
         //TODO teker teker rcyleview'e atıcaz bunları
-        Toast.makeText(getContext(),mNotes.toString(),Toast.LENGTH_SHORT).show();
-
 
 
 
