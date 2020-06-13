@@ -1,20 +1,18 @@
 package com.eozdemir.notepad.model;
 
 
-import java.util.Date;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class Note extends RealmObject {
 
     private RealmList<String> note;
-    private Date date;
+    private String date;
 
     public Note() {
     }
 
-    public Note(RealmList<String> note, Date date) {
+    public Note(RealmList<String> note, String date) {
         this.note = note;
         this.date = date;
     }
@@ -27,11 +25,11 @@ public class Note extends RealmObject {
                 '}';
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

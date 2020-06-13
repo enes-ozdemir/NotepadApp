@@ -7,7 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eozdemir.notepad.MainActivity;
+import com.eozdemir.notepad.interfaces.IOnNoteListener;
 import com.eozdemir.notepad.R;
+import com.eozdemir.notepad.adapters.MainAdapter;
 import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,7 +30,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener {
+public class FragmentMain extends Fragment implements SearchView.OnQueryTextListener, IOnNoteListener {
 
     private static String TAG = "MainPage";
 
@@ -53,9 +55,7 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
         setToolbar(view);
         readData();
 
-
         return view;
-
     }
 
     private void readData() {
@@ -72,15 +72,15 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
             note.add(mNote.get(i).getNote().get(0).toString());
         }
 
-        mAdapter = new MainAdapter(mRealm, note);
+        mAdapter = new MainAdapter(mRealm, note,this);
         mRecyclerView.setAdapter(mAdapter);
 
     }
 
     private void setAddNote(View view) {
+
         mAddNote = view.findViewById(R.id.addNote);
         mAddNote.setRippleColor((getResources().getColor(R.color.design_default_color_primary_dark)));
-
 
         mAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,5 +118,17 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void onNoteClick(int position) {
+        ((MainActivity) getActivity()).setViewPager(1);
+        Toast.makeText(getContext(), note.get(position).toString(), Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("NOTE",note.get(position).toString());
+        bundle.putBoolean("ISNEW",false);
+        FragmentAddNote fragmentAddNote = new FragmentAddNote();
+        fragmentAddNote.setArguments(bundle);
     }
 }

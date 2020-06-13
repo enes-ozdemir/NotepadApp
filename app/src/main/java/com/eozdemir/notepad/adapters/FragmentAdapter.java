@@ -1,4 +1,4 @@
-package com.eozdemir.notepad.fragments;
+package com.eozdemir.notepad.adapters;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +23,6 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
 
         return mFragmentList.get(position);
     }

@@ -19,10 +19,9 @@ import com.eozdemir.notepad.R;
 import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Date;
-
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class FragmentAddNote extends Fragment {
 
@@ -35,7 +34,6 @@ public class FragmentAddNote extends Fragment {
     Toolbar mToolbar;
     Realm mRealm;
     private RealmList<String> note;
-    final static Date mDate = new Date();
 
 
 
@@ -50,9 +48,22 @@ public class FragmentAddNote extends Fragment {
         fabSave = view.findViewById(R.id.fabSave);
         mEditText = view.findViewById(R.id.etNote);
 
+        mRealm = Realm.getDefaultInstance();
+        mRealm.beginTransaction();
+        mRealm.commitTransaction();
+        RealmResults<Note> mNote = mRealm.where(Note.class).findAll();
+
+        mEditText.setText(mNote.get(1).getNote().get(0).toString());
+
         setToolbar(view);
 
         fabSave.setRippleColor((getResources().getColor(R.color.design_default_color_primary_dark)));
+
+        Bundle bundle =this.getArguments();
+        if(bundle!=null) {
+            String data= bundle.getString("key");
+            mEditText.setText(data);
+        }
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +85,7 @@ public class FragmentAddNote extends Fragment {
                     public void execute(Realm realm) {
                         Note mNote = realm.createObject(Note.class);
                         mNote.setNote(note);
-                        mNote.setDate(mDate);
+                        //mNote.setDate(new Date().toString());
                     }
                 });
             }
@@ -97,5 +108,9 @@ public class FragmentAddNote extends Fragment {
         mToolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         setHasOptionsMenu(true);
+
+
     }
+
+
 }

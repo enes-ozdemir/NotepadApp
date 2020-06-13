@@ -8,36 +8,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        >
 
         <LinearLayout
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/mNoteHolder"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:text="NOTEE">
-            </TextView>
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mDate"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
-                android:text="tarih">
+                android:maxLines="1"
+                android:text="NOTE"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title">
+
             </TextView>
 
+          <!--
+            <TextView
+                android:id="@+id/mDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="tarih"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse">
+
+            </TextView> -->
 
 
         </LinearLayout>
-
 
 
     </androidx.cardview.widget.CardView>

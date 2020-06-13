@@ -55,10 +55,4 @@
         app:backgroundTint="#2962FF"
         app:srcCompat="@drawable/vector_plus" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
 </RelativeLayout>
