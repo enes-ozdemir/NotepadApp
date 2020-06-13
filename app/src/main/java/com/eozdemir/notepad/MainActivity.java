@@ -3,8 +3,6 @@ package com.eozdemir.notepad;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.eozdemir.notepad.adapters.FragmentAdapter;
@@ -27,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.containter);
-        setupViewPager(mViewPager);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+         setupViewPager(mViewPager);
         mRealm = Realm.getDefaultInstance();
         mRealm.beginTransaction();
         mRealm.commitTransaction();

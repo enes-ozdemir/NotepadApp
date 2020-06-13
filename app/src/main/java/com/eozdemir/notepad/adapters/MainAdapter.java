@@ -1,5 +1,6 @@
 package com.eozdemir.notepad.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.eozdemir.notepad.fragments.FragmentAddNote;
 import com.eozdemir.notepad.interfaces.IOnNoteListener;
 import com.eozdemir.notepad.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -22,7 +26,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     public MainAdapter(Realm realm, RealmList<String> note, IOnNoteListener onNoteListener) {
         mRealm = realm;
         mNote = note;
-        mOnNoteListener=onNoteListener;
+        mOnNoteListener = onNoteListener;
     }
 
     @NonNull
@@ -31,7 +35,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_layout, parent, false);
 
-        return new ViewHolder(view,mOnNoteListener);
+        return new ViewHolder(view, mOnNoteListener);
     }
 
     @Override
@@ -68,7 +72,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             mOnNoteListener.onNoteClick(getAdapterPosition());
-
+            EventBus.getDefault().post(new FragmentAddNote.MessageEvent(getAdapterPosition()));
+            notifyDataSetChanged();
         }
     }
 
