@@ -1,7 +1,6 @@
 package com.eozdemir.notepad.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.eozdemir.notepad.MainActivity;
 import com.eozdemir.notepad.R;
@@ -35,6 +32,7 @@ public class FragmentAddNote extends Fragment {
 
     ImageButton btnBack;
     ImageButton btnDelete;
+    FloatingActionButton fabAdd;
     FloatingActionButton fabSave;
     EditText mEditText;
     Toolbar mToolbar;
@@ -84,6 +82,7 @@ public class FragmentAddNote extends Fragment {
 
         btnBack = view.findViewById(R.id.btn_back);
         btnDelete = view.findViewById(R.id.btn_delete);
+        fabAdd = view.findViewById(R.id.fabAdd);
         fabSave = view.findViewById(R.id.fabSave);
         mEditText = view.findViewById(R.id.etNote);
         EventBus.getDefault().register(this);
@@ -104,7 +103,7 @@ public class FragmentAddNote extends Fragment {
         //////////////////////////////////////
         setToolbar(view);
 
-        fabSave.setRippleColor((getResources().getColor(R.color.design_default_color_primary_dark)));
+        fabAdd.setRippleColor((getResources().getColor(R.color.design_default_color_primary_dark)));
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -116,10 +115,11 @@ public class FragmentAddNote extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity) getActivity()).setViewPager(0);
+
             }
         });
 
-        fabSave.setOnClickListener(new View.OnClickListener() {
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 note = new RealmList<>();
@@ -137,12 +137,33 @@ public class FragmentAddNote extends Fragment {
             }
         });
 
+        fabSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note = new RealmList<>();
+                mRealm= Realm.getDefaultInstance();
+                mRealm.beginTransaction();
+                mRealm.commitTransaction();
+                note.add(mEditText.getText().toString());
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Note mNote = realm.createObject(Note.class);
+                        mNote.setNote(note);
+                        mRealm.copyToRealmOrUpdate(mNote);
+                    }
+                });
+            }
+        });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mEditText.setText("");
-                //((MainActivity) getActivity()).setViewPager(0);
-                //mNote.deleteFromRealm(position);
+                mEditText.setText("");
+                ((MainActivity) getActivity()).setViewPager(0);
+                mRealm.beginTransaction();
+                mNote.deleteFromRealm(position);
+                mRealm.commitTransaction();
                 Toast.makeText(getContext(), R.string.note_deleted, Toast.LENGTH_SHORT).show();
 
             }
@@ -163,8 +184,6 @@ public class FragmentAddNote extends Fragment {
 
     public static class MessageEvent {
         public MessageEvent(int positionn) {
-
-            Log.e("ASD", String.valueOf(position));
             position = positionn;
 
         }
@@ -173,9 +192,23 @@ public class FragmentAddNote extends Fragment {
     @Subscribe
     public void onMessageEvente(MessageEvente evente) {
         mEditText.setText(mNote.get(position).getNote().get(0));
+        fabSave.setVisibility(View.GONE);
+
 
     }
     public static class MessageEvente {
+
+
+    }
+    @Subscribe
+    public void onDeleteNote(DeleteNote note) {
+        mEditText.setText("");
+        position=0;
+        fabAdd.setVisibility(View.GONE);
+        fabSave.setVisibility(View.VISIBLE);
+
+    }
+    public static class DeleteNote {
 
 
     }

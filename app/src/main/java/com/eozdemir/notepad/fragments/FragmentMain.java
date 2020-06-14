@@ -15,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.eozdemir.notepad.MainActivity;
 import com.eozdemir.notepad.interfaces.IOnNoteListener;
@@ -25,6 +27,8 @@ import com.eozdemir.notepad.adapters.MainAdapter;
 import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -54,6 +58,16 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
         setAddNote(view);
         setToolbar(view);
         readData();
+
+        final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(FragmentMain.this).attach(FragmentMain.this).commit();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
         return view;
     }
@@ -87,6 +101,8 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
             @Override
             public void onClick(View v) {
                 ((MainActivity) getActivity()).setViewPager(1);
+                EventBus.getDefault().post(new FragmentAddNote.DeleteNote());
+
             }
         });
 
@@ -104,11 +120,6 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         ((MainActivity) getActivity()).getMenuInflater().inflate(R.menu.menu, menu);
-
-        MenuItem menuItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setOnQueryTextListener(this);
-
     }
 
     @Override
