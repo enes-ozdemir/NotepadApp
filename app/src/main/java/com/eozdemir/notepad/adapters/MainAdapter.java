@@ -73,6 +73,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         public void onClick(View v) {
             mOnNoteListener.onNoteClick(getAdapterPosition());
             EventBus.getDefault().post(new FragmentAddNote.MessageEvent(getAdapterPosition()));
+            EventBus.getDefault().post(new FragmentAddNote.MessageEvente());
+
             notifyDataSetChanged();
         }
     }

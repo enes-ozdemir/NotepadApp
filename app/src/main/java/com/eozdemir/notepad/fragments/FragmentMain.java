@@ -75,6 +75,7 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
         mAdapter = new MainAdapter(mRealm, note,this);
         mRecyclerView.setAdapter(mAdapter);
 
+
     }
 
     private void setAddNote(View view) {

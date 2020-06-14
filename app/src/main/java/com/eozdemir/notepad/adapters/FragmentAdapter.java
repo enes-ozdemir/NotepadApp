@@ -14,6 +14,10 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
 
+    public FragmentAdapter(@NonNull FragmentManager fm, int behavior) {
+        super(fm, behavior);
+    }
+
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -21,10 +25,6 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     private final List<String> mFragmentNameList = new ArrayList<>();
-
-    public FragmentAdapter(FragmentManager fm) {
-        super(fm);
-    }
 
     @Override
     public int getItemPosition(Object object) {

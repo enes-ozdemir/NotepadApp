@@ -14,10 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.eozdemir.notepad.MainActivity;
 import com.eozdemir.notepad.R;
-import com.eozdemir.notepad.interfaces.Updateable;
 import com.eozdemir.notepad.model.Note;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,7 +29,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class FragmentAddNote extends Fragment implements Updateable {
+public class FragmentAddNote extends Fragment {
 
     private static String TAG = "AddNote";
 
@@ -40,6 +41,7 @@ public class FragmentAddNote extends Fragment implements Updateable {
     static Realm mRealm;
     private static RealmList<String> note;
     static int position;
+    public static RealmResults<Note> mNote;
 
 
     @Override
@@ -92,14 +94,12 @@ public class FragmentAddNote extends Fragment implements Updateable {
 
         ////////////////////////////////////
 
-        RealmResults<Note> mNote = mRealm.where(Note.class).findAll();
-
-        mNote.get(position);
+        mNote = mRealm.where(Note.class).findAll();
 
         //mEditText.setText(mNote.get(Integer.valueOf(String.valueOf(mEditText.getText()))).getNote().get(0));
 
 
-        mEditText.setText(mNote.get(position).getNote().get(0));
+       // mEditText.setText(mNote.get(position).getNote().get(0));
 
         //////////////////////////////////////
         setToolbar(view);
@@ -132,7 +132,6 @@ public class FragmentAddNote extends Fragment implements Updateable {
                     public void execute(Realm realm) {
                         Note mNote = realm.createObject(Note.class);
                         mNote.setNote(note);
-                        //mNote.setDate(new Date().toString());
                     }
                 });
             }
@@ -141,8 +140,9 @@ public class FragmentAddNote extends Fragment implements Updateable {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEditText.setText("");
-                ((MainActivity) getActivity()).setViewPager(0);
+                //mEditText.setText("");
+                //((MainActivity) getActivity()).setViewPager(0);
+                //mNote.deleteFromRealm(position);
                 Toast.makeText(getContext(), R.string.note_deleted, Toast.LENGTH_SHORT).show();
 
             }
@@ -155,21 +155,10 @@ public class FragmentAddNote extends Fragment implements Updateable {
         mToolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         setHasOptionsMenu(true);
-
-
     }
 
     @Subscribe
     public void onMessageEvent(MessageEvent event) {
-    }
-
-    public int Enes(int position) {
-        return position;
-    }
-
-    @Override
-    public void update() {
-
     }
 
     public static class MessageEvent {
@@ -179,6 +168,15 @@ public class FragmentAddNote extends Fragment implements Updateable {
             position = positionn;
 
         }
+
+    }
+    @Subscribe
+    public void onMessageEvente(MessageEvente evente) {
+        mEditText.setText(mNote.get(position).getNote().get(0));
+
+    }
+    public static class MessageEvente {
+
 
     }
 }

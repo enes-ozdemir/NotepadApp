@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
+        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),0);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
          setupViewPager(mViewPager);
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
 
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(),0);
         adapter.addFragment(new FragmentMain(), "MainPage");
         adapter.addFragment(new FragmentAddNote(), "AddNote");
         viewPager.setAdapter(adapter);
