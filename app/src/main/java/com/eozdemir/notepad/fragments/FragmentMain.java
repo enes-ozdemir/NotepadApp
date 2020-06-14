@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +38,6 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
-
     private FloatingActionButton mAddNote;
     private Toolbar mToolbar;
     private Realm mRealm;
@@ -86,10 +83,8 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
             note.add(mNote.get(i).getNote().get(0).toString());
         }
 
-        mAdapter = new MainAdapter(mRealm, note,this);
+        mAdapter = new MainAdapter(mRealm, note, this);
         mRecyclerView.setAdapter(mAdapter);
-
-
     }
 
     private void setAddNote(View view) {
@@ -105,7 +100,6 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
 
             }
         });
-
     }
 
     private void setToolbar(View view) {
@@ -135,12 +129,5 @@ public class FragmentMain extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onNoteClick(int position) {
         ((MainActivity) getActivity()).setViewPager(1);
-        Toast.makeText(getContext(), note.get(position).toString(), Toast.LENGTH_SHORT).show();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("NOTE",note.get(position).toString());
-        bundle.putBoolean("ISNEW",false);
-        FragmentAddNote fragmentAddNote = new FragmentAddNote();
-        fragmentAddNote.setArguments(bundle);
     }
 }

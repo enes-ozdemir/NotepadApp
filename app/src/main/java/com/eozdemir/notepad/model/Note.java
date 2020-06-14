@@ -6,7 +6,8 @@ import io.realm.RealmObject;
 
 public class Note extends RealmObject {
 
-    private RealmList<String> note;
+    RealmList<String> note;
+
     private String date;
 
     public Note() {

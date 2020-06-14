@@ -91,16 +91,8 @@ public class FragmentAddNote extends Fragment {
         mRealm.beginTransaction();
         mRealm.commitTransaction();
 
-        ////////////////////////////////////
 
         mNote = mRealm.where(Note.class).findAll();
-
-        //mEditText.setText(mNote.get(Integer.valueOf(String.valueOf(mEditText.getText()))).getNote().get(0));
-
-
-       // mEditText.setText(mNote.get(position).getNote().get(0));
-
-        //////////////////////////////////////
         setToolbar(view);
 
         fabAdd.setRippleColor((getResources().getColor(R.color.design_default_color_primary_dark)));
@@ -141,7 +133,7 @@ public class FragmentAddNote extends Fragment {
             @Override
             public void onClick(View v) {
                 note = new RealmList<>();
-                mRealm= Realm.getDefaultInstance();
+                mRealm = Realm.getDefaultInstance();
                 mRealm.beginTransaction();
                 mRealm.commitTransaction();
                 note.add(mEditText.getText().toString());
@@ -150,7 +142,6 @@ public class FragmentAddNote extends Fragment {
                     public void execute(Realm realm) {
                         Note mNote = realm.createObject(Note.class);
                         mNote.setNote(note);
-                        mRealm.copyToRealmOrUpdate(mNote);
                     }
                 });
             }
@@ -185,31 +176,24 @@ public class FragmentAddNote extends Fragment {
     public static class MessageEvent {
         public MessageEvent(int positionn) {
             position = positionn;
-
         }
-
     }
+
     @Subscribe
     public void onMessageEvente(MessageEvente evente) {
         mEditText.setText(mNote.get(position).getNote().get(0));
         fabSave.setVisibility(View.GONE);
-
-
     }
-    public static class MessageEvente {
 
+    public static class MessageEvente {}
 
-    }
     @Subscribe
     public void onDeleteNote(DeleteNote note) {
         mEditText.setText("");
-        position=0;
+        position = 0;
         fabAdd.setVisibility(View.GONE);
         fabSave.setVisibility(View.VISIBLE);
 
     }
-    public static class DeleteNote {
-
-
-    }
+    public static class DeleteNote {}
 }

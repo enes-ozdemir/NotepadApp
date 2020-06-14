@@ -13,7 +13,6 @@ import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FragmentAdapter mFragmentAdapter;
     private ViewPager mViewPager;
     Realm mRealm;
 
@@ -23,22 +22,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),0);
-
         mViewPager = (ViewPager) findViewById(R.id.container);
-         setupViewPager(mViewPager);
+        setupViewPager(mViewPager);
         mRealm = Realm.getDefaultInstance();
         mRealm.beginTransaction();
         mRealm.commitTransaction();
-
-
     }
-
-
 
     private void setupViewPager(ViewPager viewPager) {
 
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(),0);
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), 0);
         adapter.addFragment(new FragmentMain(), "MainPage");
         adapter.addFragment(new FragmentAddNote(), "AddNote");
         viewPager.setAdapter(adapter);
@@ -46,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setViewPager(int fragmentNumber) {
-
         mViewPager.setCurrentItem(fragmentNumber);
     }
 
