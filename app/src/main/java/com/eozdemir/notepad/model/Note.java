@@ -8,30 +8,17 @@ public class Note extends RealmObject {
 
     RealmList<String> note;
 
-    private String date;
-
     public Note() {
     }
 
-    public Note(RealmList<String> note, String date) {
+    public Note(RealmList<String> note) {
         this.note = note;
-        this.date = date;
     }
 
     @Override
     public String toString() {
         return "Note{" +
-                "note='" + note + '\'' +
-                ", date=" + date +
-                '}';
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+                "note='" + note;
     }
 
     public RealmList<String> getNote() {

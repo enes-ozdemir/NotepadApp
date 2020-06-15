@@ -63,14 +63,6 @@ public class FragmentAddNote extends Fragment {
                     .detach(this)
                     .attach(this)
                     .commit();
-
-         /*  FragmentTransaction ft = getFragmentManager().beginTransaction();
-           if (Build.VERSION.SDK_INT >= 26) {
-               ft.setReorderingAllowed(false);
-           }
-           ft.detach(this).attach(this).commit();
-
-*/
         }
     }
 
@@ -83,7 +75,7 @@ public class FragmentAddNote extends Fragment {
         btnBack = view.findViewById(R.id.btn_back);
         btnDelete = view.findViewById(R.id.btn_delete);
         fabAdd = view.findViewById(R.id.fabAdd);
-        fabSave = view.findViewById(R.id.fabSave);
+        //fabSave = view.findViewById(R.id.fabSave);
         mEditText = view.findViewById(R.id.etNote);
         EventBus.getDefault().register(this);
 
@@ -129,7 +121,7 @@ public class FragmentAddNote extends Fragment {
             }
         });
 
-        fabSave.setOnClickListener(new View.OnClickListener() {
+        /*fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 note = new RealmList<>();
@@ -140,12 +132,11 @@ public class FragmentAddNote extends Fragment {
                 mRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        Note mNote = realm.createObject(Note.class);
-                        mNote.setNote(note);
+                       mRealm.where(Note.class).equalTo("note",mNote.get(position).getNote().get(0));
                     }
                 });
             }
-        });
+        });*/
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +173,7 @@ public class FragmentAddNote extends Fragment {
     @Subscribe
     public void onMessageEvente(MessageEvente evente) {
         mEditText.setText(mNote.get(position).getNote().get(0));
-        fabSave.setVisibility(View.GONE);
+        //fabSave.setVisibility(View.GONE);
     }
 
     public static class MessageEvente {}

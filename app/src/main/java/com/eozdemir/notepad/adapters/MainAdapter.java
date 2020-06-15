@@ -63,7 +63,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             super(itemView);
 
             mNoteHolder = (TextView) itemView.findViewById(R.id.mNoteHolder);
-            //mDate = (TextView) itemView.findViewById(R.id.mDate);
             this.mOnNoteListener = mOnNoteListener;
             itemView.setOnClickListener(this);
         }
